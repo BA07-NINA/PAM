@@ -26,11 +26,36 @@ function DeviceForm() {
     },
   });
 
+  const fieldsConfig = [
+    { name: "country", label: "Country", type: "text" },
+    { name: "site", label: "Site", type: "text" },
+    { name: "date", label: "Date", type: "date" },
+    { name: "time", label: "Time (UTC)", type: "time" },
+    { name: "latitude", label: "Latitude", type: "text" },
+    { name: "longitude", label: "Longitude", type: "text" },
+    {
+      name: "coordUncertainty",
+      label: "Coordinate Uncertainty",
+      type: "number",
+    },
+    { name: "gpsDevice", label: "GPS device", type: "text" },
+    { name: "deviceId", label: "Device ID", type: "text" },
+    { name: "deploymentId", label: "Deployment ID", type: "text" },
+    { name: "micHeight", label: "Microphone Height", type: "number" },
+    { name: "micDirection", label: "Microphone Direction", type: "text" },
+    { name: "habitat", label: "Habitat", type: "text" },
+    { name: "score", label: "Score", type: "number" },
+    { name: "protocolChecklist", label: "Protocol Checklist", type: "text" },
+    { name: "email", label: "Adresse e-mail", type: "email" },
+    { name: "comment", label: "Comment", type: "text" },
+  ] as const;
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        form.handleSubmit();
       }}
     >
       <h1>OVERSKRIFT</h1>
@@ -42,260 +67,41 @@ function DeviceForm() {
           marginBottom: "1rem",
         }}
       >
-        <form.Field
-          name="country"
-          children={(field) => (
-            <div>
-              <label htmlFor="country">Country:</label>
-              <input
-                id="country"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="site"
-          children={(field) => (
-            <div>
-              <label htmlFor="site">Site:</label>
-              <input
-                id="site"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="date"
-          children={(field) => (
-            <div>
-              <label htmlFor="date">Date:</label>
-              <input
-                id="date"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="time"
-          children={(field) => (
-            <div>
-              <label htmlFor="time">Time:</label>
-              <input
-                id="time"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="latitude"
-          children={(field) => (
-            <div>
-              <label htmlFor="latitude">Latitude:</label>
-              <input
-                id="latitude"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="longitude"
-          children={(field) => (
-            <div>
-              <label htmlFor="longitude">Longitude:</label>
-              <input
-                id="longitude"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-        <form.Field
-          name="coordUncertainty"
-          children={(field) => (
-            <div>
-              <label htmlFor="coordUncertainty">Coordinate Uncertainty:</label>
-              <input
-                id="coordUncertainty"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
+        {fieldsConfig.map((fieldConfig) => (
+          <form.Field
+            key={fieldConfig.name}
+            name={fieldConfig.name}
+            children={(field) => (
+              <div className="flex flex-col">
+                <label htmlFor={fieldConfig.name}>{fieldConfig.label}:</label>
+                <input
+                    className="border border-black rounded"
+                    id={fieldConfig.name}
+                    type={fieldConfig.type}
+                    value={field.state.value}
+                    onChange={(e) => {
+                        let value = e.target.value;
+                        if (
+                        fieldConfig.name === "latitude" ||
+                        fieldConfig.name === "longitude"
+                        ) {
+                        value = value.replace(/,/g, ".");
+                        const regex = /^\d*\.?\d{0,5}$/;
+                        if (!regex.test(value)) return;
+                        }
 
-        <form.Field
-          name="gpsDevice"
-          children={(field) => (
-            <div>
-              <label htmlFor="gpsDevice">GPS device:</label>
-              <input
-                id="gpsDevice"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
+                        field.handleChange(value);
+                    }}
+                />
+              </div>
+            )}
+          />
+        ))}
 
-        <form.Field
-          name="deviceId"
-          children={(field) => (
-            <div>
-              <label htmlFor="deviceId">Device ID:</label>
-              <input
-                id="deviceId"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-
-        <form.Field
-          name="deploymentId"
-          children={(field) => (
-            <div>
-              <label htmlFor="deploymentId">Deployment ID:</label>
-              <input
-                id="deploymentId"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        /> 
-
-        <form.Field
-          name="micHeight"
-          children={(field) => (
-            <div>
-              <label htmlFor="micHeight">Microphone Height:</label>
-              <input
-                id="migHeigh"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        /> 
-
-        <form.Field
-          name="micDirection"
-          children={(field) => (
-            <div>
-              <label htmlFor="micDirection">Microphone Direction:</label>
-              <input
-                id="micDirection"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />     
-
-        <form.Field
-          name="habitat"
-          children={(field) => (
-            <div>
-              <label htmlFor="habitat">Habitat:</label>
-              <input
-                id="habitat"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />  
-
-        <form.Field
-          name="score"
-          children={(field) => (
-            <div>
-              <label htmlFor="score">Score:</label>
-              <input
-                id="score"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-
-        <form.Field
-          name="protocolChecklist"
-          children={(field) => (
-            <div>
-              <label htmlFor="protocolChecklist">Protocol Checklist:</label>
-              <input
-                id="protocolChecklist"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-
-        <form.Field
-          name="email"
-          children={(field) => (
-            <div>
-              <label htmlFor="email">Adresse e-mail:</label>
-              <input
-                id="email"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-
-        <form.Field
-          name="comment"
-          children={(field) => (
-            <div>
-              <label htmlFor="comment">Comment:</label>
-              <input
-                id="comment"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </div>
-          )}
-        />
-
-        <button onClick={form.handleSubmit} type="submit">
-          Send inn
-        </button>
+        <button type="submit">Save</button>
       </div>
     </form>
   );
 }
+
 export default DeviceForm;
