@@ -1,3 +1,4 @@
+// frontend/src/routes/devices/-devicesPage.tsx
 import { useState } from 'react';
 import { devicesQueryOptions } from '@/api/query';
 import {
@@ -21,10 +22,30 @@ import { Device } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
+import Modal from '@/components/Modal/Modal';
+import DeviceForm from '@/components/DeviceForm';
+import DeviceNav from '@/components/pagenav/DeviceNav';
+import DeviceDetailPage from './$deviceId/-deviceDetailPage';
+import DeviceAudioFilesPage from './$deviceId/-deviceAudioFilesPage';
+import { useEffect } from 'react';
 
 export default function DevicesPage() {
   const { data } = useSuspenseQuery(devicesQueryOptions);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'details' | 'audioFiles'>('details');
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isModalOpen]);
+
 
   const columns: ColumnDef<Device>[] = [
     {
@@ -156,39 +177,50 @@ export default function DevicesPage() {
   });
 
   return (
-    <div className="rounded-md border m-5 shadow-md">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="px-0 py-0">
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="px-4 py-2">
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div>
+      <DeviceNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      <button onClick={openModal} className="btn btn-primary">Open Device Form</button>
+
+     
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <DeviceForm />
+      </Modal>
+  
+  
+      <div className="rounded-md border m-5 shadow-md">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} className="px-0 py-0">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="px-4 py-2">
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
