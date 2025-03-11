@@ -71,26 +71,28 @@ function DeviceForm({onSave}) {
             key={fieldConfig.name}
             name={fieldConfig.name}
             children={(field) => (
-              <div className="flex flex-col">
+              <div
+                className={`flex flex-col my-2 ${fieldConfig.name === "comment" ? "col-span-2" : ""} text-sm md:text-base lg:text-lg`}
+              >
                 <label htmlFor={fieldConfig.name}>{fieldConfig.label}:</label>
                 <input
-                    className="border border-black rounded"
-                    id={fieldConfig.name}
-                    type={fieldConfig.type}
-                    value={field.state.value}
-                    onChange={(e) => {
-                        let value = e.target.value;
-                        if (
-                        fieldConfig.name === "latitude" ||
-                        fieldConfig.name === "longitude"
-                        ) {
-                        value = value.replace(/,/g, ".");
-                        const regex = /^\d*\.?\d{0,5}$/;
-                        if (!regex.test(value)) return;
-                        }
+                  className={`border border-gray-300 rounded w-full p-2`}
+                  id={fieldConfig.name}
+                  type={fieldConfig.type}
+                  value={field.state.value}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    if (
+                      fieldConfig.name === "latitude" ||
+                      fieldConfig.name === "longitude"
+                    ) {
+                      value = value.replace(/,/g, ".");
+                      const regex = /^\d*\.?\d{0,5}$/;
+                      if (!regex.test(value)) return;
+                    }
 
-                        field.handleChange(value);
-                    }}
+                    field.handleChange(value);
+                  }}
                 />
               </div>
             )}
