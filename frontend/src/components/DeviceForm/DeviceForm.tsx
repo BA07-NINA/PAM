@@ -1,6 +1,10 @@
 import { useForm } from "@tanstack/react-form";
 
-function DeviceForm({onSave}) {
+interface DeviceFormProps {
+  onSave: () => void;
+}
+
+function DeviceForm({ onSave }: DeviceFormProps) {
   const form = useForm({
     defaultValues: {
       country: "",
