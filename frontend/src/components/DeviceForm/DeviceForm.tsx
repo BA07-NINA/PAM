@@ -58,7 +58,6 @@ function DeviceForm() {
         form.handleSubmit();
       }}
     >
-      <h1>OVERSKRIFT</h1>
       <div
         style={{
           display: "grid",
@@ -72,33 +71,41 @@ function DeviceForm() {
             key={fieldConfig.name}
             name={fieldConfig.name}
             children={(field) => (
-              <div className="flex flex-col">
+              <div
+                className={`flex flex-col my-2 ${fieldConfig.name === "comment" ? "col-span-2" : ""} text-sm md:text-base lg:text-lg`}
+              >
                 <label htmlFor={fieldConfig.name}>{fieldConfig.label}:</label>
                 <input
-                    className="border border-black rounded"
-                    id={fieldConfig.name}
-                    type={fieldConfig.type}
-                    value={field.state.value}
-                    onChange={(e) => {
-                        let value = e.target.value;
-                        if (
-                        fieldConfig.name === "latitude" ||
-                        fieldConfig.name === "longitude"
-                        ) {
-                        value = value.replace(/,/g, ".");
-                        const regex = /^\d*\.?\d{0,5}$/;
-                        if (!regex.test(value)) return;
-                        }
+                  className={`border border-gray-300 rounded w-full p-2`}
+                  id={fieldConfig.name}
+                  type={fieldConfig.type}
+                  value={field.state.value}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    if (
+                      fieldConfig.name === "latitude" ||
+                      fieldConfig.name === "longitude"
+                    ) {
+                      value = value.replace(/,/g, ".");
+                      const regex = /^\d*\.?\d{0,5}$/;
+                      if (!regex.test(value)) return;
+                    }
 
-                        field.handleChange(value);
-                    }}
+                    field.handleChange(value);
+                  }}
                 />
               </div>
             )}
           />
         ))}
-
-        <button type="submit">Save</button>
+        <div className="col-span-2 flex justify-center mt-6">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </form>
   );
