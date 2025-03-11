@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 
-function DeviceForm() {
+function DeviceForm({onSave}) {
   const form = useForm({
     defaultValues: {
       country: "",
@@ -23,7 +23,10 @@ function DeviceForm() {
     },
     onSubmit: async (values) => {
       console.log(values);
-    },
+      if (onSave) {
+         onSave(); 
+      }
+   },
   });
 
   const fieldsConfig = [
@@ -52,13 +55,9 @@ function DeviceForm() {
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
+      onSubmit={form.handleSubmit}
     >
-      <h1>OVERSKRIFT</h1>
+    
       <div
         style={{
           display: "grid",
@@ -97,10 +96,18 @@ function DeviceForm() {
             )}
           />
         ))}
-
-        <button type="submit">Save</button>
       </div>
+
+      
+     
+    <div className="text-center mt-6">
+      <button type="submit" className="bg-green-900 text-white py-2 px-8 rounded-lg hover:bg-green-700 transition-all block mx-auto w-80">
+          Save
+      </button>
+    </div>
+
     </form>
+     
   );
 }
 

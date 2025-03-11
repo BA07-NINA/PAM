@@ -33,10 +33,13 @@ export default function DevicesPage() {
   const { data } = useSuspenseQuery(devicesQueryOptions);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'details' | 'audioFiles'>('details');
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const handleSave = () => {
+    closeModal();
+  };
 
   useEffect(() => {
     if (isModalOpen) {
@@ -178,12 +181,16 @@ export default function DevicesPage() {
 
   return (
     <div>
-      <DeviceNav activeTab={activeTab} setActiveTab={setActiveTab} />
-      <button onClick={openModal} className="btn btn-primary">Open Device Form</button>
+      <button
+       onClick={openModal}
+      className="bg-green-900 text-white py-2 px-8 rounded-lg hover:bg-green-700 transition-all block w-30
+    ml-auto mr-4 my-4">
 
+        Add info
+      </button>
      
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <DeviceForm />
+        <DeviceForm onSave={handleSave} />
       </Modal>
   
   
